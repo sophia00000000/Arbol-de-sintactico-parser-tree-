@@ -1,7 +1,7 @@
-E → E op_suma T
-E → T
-T → T op_mul F
-T → F
-F → id
-F → num
-F → pari E pard
+E -> E op_suma T
+E -> T
+T -> T op_mul F
+T -> F
+F -> id
+F -> num
+F -> pari E pard
