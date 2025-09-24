@@ -49,13 +49,7 @@ class EarleyParser:
                     if not line or line.startswith('#'):
                         continue
                     
-                    # Parsear regla: A → B C D
-                    if '→' in line:
-                        left, right = line.split('→', 1)
-                        left = left.strip()
-                        right = right.strip().split()
-                        grammar[left].append(right)
-                    elif '->' in line:  # Permitir también ->
+                    if '->' in line:  # Permitir también ->
                         left, right = line.split('->', 1)
                         left = left.strip()
                         right = right.strip().split()
@@ -83,7 +77,7 @@ class EarleyParser:
                         self.terminals.add(symbol)
     
     def tokenize(self, input_string):
-        # Tokenizador simple que maneja operadores y números
+        # Tokenizador  maneja operadores y números
         tokens = []
         i = 0
         while i < len(input_string):
@@ -257,10 +251,8 @@ class EarleyParser:
                 font_size=10,
                 font_weight='bold',
                 arrows=True,
-                edge_color='gray',
                 arrowsize=20)
         
-        plt.title("Árbol de Sintaxis")
         plt.axis('off')
         plt.tight_layout()
         plt.show()
@@ -296,22 +288,8 @@ class EarleyParser:
         return pos
 
 def main():
-    # Crear el archivo de gramática de ejemplo si no existe
-    grammar_content = """E → E op_suma T
-E → T
-T → T op_mul F
-T → F
-F → id
-F → num
-F → pari E pard"""
-    
-    try:
-        with open('gra.txt', 'r') as f:
+    with open('gra.txt', 'r') as f:
             pass
-    except FileNotFoundError:
-        print("Creando archivo gra.txt con gramática de ejemplo...")
-        with open('gra.txt', 'w', encoding='utf-8') as f:
-            f.write(grammar_content)
     
     # Crear parser
     parser = EarleyParser('gra.txt')
@@ -319,25 +297,12 @@ F → pari E pard"""
     if not parser.grammar:
         print("Error: No se pudo cargar la gramática")
         return
-    
-    print("Gramática cargada:")
-    for left, productions in parser.grammar.items():
-        for production in productions:
-            print(f"{left} → {' '.join(production)}")
-    
-    print(f"\nSímbolo de inicio: {parser.start_symbol}")
-    print(f"No terminales: {parser.non_terminals}")
-    print(f"Terminales: {parser.terminals}")
-    
+
     # Probar con entrada del usuario
     while True:
         try:
-            input_string = input("\nIngrese una expresión (o 'quit' para salir): ").strip()
-            if input_string.lower() == 'quit':
-                break
-            
-            print(f"\nAnalizando: {input_string}")
-            
+            input_string = input("\nIngrese una expresión: ").strip()
+                        
             # Tokenizar y mostrar tokens
             tokens = parser.tokenize(input_string)
             print(f"Tokens: {tokens}")
@@ -346,16 +311,10 @@ F → pari E pard"""
             success, tree = parser.parse(input_string)
             
             if success:
-                print("ACEPTA")
-                print("Árbol de sintaxis generado exitosamente")
-                
+                print("ACEPTA")                
                 # Visualizar árbol
                 parser.visualize_tree(tree)
-                
-                # Mostrar información del árbol
-                if tree:
-                    print(f"Nodos en el árbol: {tree.number_of_nodes()}")
-                    print(f"Aristas en el árbol: {tree.number_of_edges()}")
+
             else:
                 print("NO ACEPTA")
                 print("La cadena no es válida según la gramática")
