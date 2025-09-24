@@ -312,18 +312,14 @@ def main():
             
             if success:
                 print("ACEPTA")                
-                # Visualizar árbol
                 parser.visualize_tree(tree)
 
             else:
                 print("NO ACEPTA")
-                print("La cadena no es válida según la gramática")
                 
         except KeyboardInterrupt:
-            print("\nSaliendo...")
             break
-        except Exception as e:
-            print(f"Error: {e}")
 
 if __name__ == "__main__":
     main()
+
